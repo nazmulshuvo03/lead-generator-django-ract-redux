@@ -12,6 +12,7 @@ node_modules
 bower_components
 
 *.sublime*
+.vscode
 
 psd
 thumb
