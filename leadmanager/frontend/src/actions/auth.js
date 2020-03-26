@@ -7,7 +7,9 @@ import {
     AUTH_ERROR,
     LOGIN_SUCCESS,
     LOGIN_FAIL,
-    LOGOUT_SUCCESS
+    LOGOUT_SUCCESS,
+    REGISTER_FAIL,
+    REGISTER_SUCCESS
 } from "./types";
 
 // Check TOKEN and Load User
@@ -55,6 +57,34 @@ export const login = (username, password) => dispath => {
             dispath(returnErrors(err.response.data, err.response.status));
             dispath({
                 type: LOGIN_FAIL
+            });
+        });
+};
+
+// Register User
+export const register = ({ username, password, email }) => dispath => {
+    // Headers
+    const config = {
+        headers: {
+            "Content-Type": "application/json"
+        }
+    };
+
+    // Request body
+    const body = JSON.stringify({ username, email, password });
+
+    axios
+        .post("/api/auth/register", body, config)
+        .then(res => {
+            dispath({
+                type: REGISTER_SUCCESS,
+                payload: res.data
+            });
+        })
+        .catch(err => {
+            dispath(returnErrors(err.response.data, err.response.status));
+            dispath({
+                type: REGISTER_FAIL
             });
         });
 };
