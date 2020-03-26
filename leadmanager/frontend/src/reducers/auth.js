@@ -1,4 +1,11 @@
-import { USER_LOADED, USER_LOADING, AUTH_ERROR } from "../actions/types";
+import {
+    USER_LOADED,
+    USER_LOADING,
+    AUTH_ERROR,
+    LOGIN_FAIL,
+    LOGIN_SUCCESS,
+    LOGOUT_SUCCESS
+} from "../actions/types";
 
 const initalState = {
     token: localStorage.getItem("token"),
@@ -24,12 +31,23 @@ export default function(state = initalState, action) {
             };
 
         case AUTH_ERROR:
+        case LOGIN_FAIL:
+        case LOGOUT_SUCCESS:
             localStorage.removeItem("token");
             return {
                 ...state,
                 token: null,
                 user: null,
                 isAuthenticated: false,
+                isLoading: false
+            };
+
+        case LOGIN_SUCCESS:
+            localStorage.setItem("token", action.payload.token);
+            return {
+                ...state,
+                ...action.payload,
+                isAuthenticated: true,
                 isLoading: false
             };
 
